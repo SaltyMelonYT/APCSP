@@ -27,3 +27,5 @@ class calc:
             calc.divide(a, b)
         else:
             print("Invalid operation")
+
+calc.doOperation()

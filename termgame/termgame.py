@@ -1,12 +1,15 @@
 import backend
-import items
+import commands
+slowprint=backend.Core.slowprint
 p1=backend.Player(input("Player name? "))
 
-print(f"Your player stats are:\nHealth: {p1.health}")
+while p1.alive():
+    commands.cmds(input("What do you want to do? /h for help "), p1)
 
-goblin=backend.Enemy("Goblin")
-
-print("You have encountered a Goblin! What do you want to do?")
-
-while goblin.alive:
-    p1.action("Use /h to see available options! ")
+    if p1.location == "grassy_meadow":
+        slowprint(f"{p1.name} encounters someone in the meadow. They approach them slowly.")
+        jeremy=backend.NPC("Jeremy")
+        jeremy.dialogue("Oh hello traveller! How are you?")
+        choice=jeremy.interact("I'm doing fine, how about you?", "Where am I?", "Who are you?")
+        if choice == "1":
+            slowprint("I'm doing just fine")

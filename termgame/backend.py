@@ -11,13 +11,11 @@ class Player:
 
     def heal(self, fooditem):
         if fooditem in items.foods:
-            # Check if there's any quantity left
             if items.foods[fooditem]["quantity"] > 0:
-                heal_amount = items.foods[fooditem]["restore"]  # or "heal" if you rename it
+                heal_amount = items.foods[fooditem]["restore"]
                 self.health += heal_amount
                 if self.health > 100:
                     self.health = 100
-                # Subtract one from quantity
                 items.foods[fooditem]["quantity"] -= 1
                 return f"{self.name} consumed {fooditem}, health is now {self.health}"
             else:
@@ -67,10 +65,11 @@ class NPC:
     def dialogue(self, text):
         Core.slowprint(f"{self.name}: {text}")
 
-    def interact(self, opt1, opt2, opt3):
+    def interact(self, opt1, opt2, opt3=None):
         print(f"1.) {opt1}")
         print(f"2.) {opt2}")
-        print(f"3.) {opt3}")
+        if opt3 is not None:
+            print(f"3.) {opt3}")
         choice=input("Choose a number. ")
         return choice
     
@@ -82,7 +81,6 @@ class Core:
         print()
 
 class Locations:
-
     @staticmethod
     def grassy_meadow(player):
         player.location="grassy_meadow"

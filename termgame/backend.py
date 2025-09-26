@@ -6,8 +6,9 @@ class Player:
     def __init__(self, name):
         self.name = name
         self.health = 100
-        self.location="house"
+        self.location="home"
         self.visited=set()
+        self.room="livingRoom"
 
     def heal(self, fooditem):
         if fooditem in items.foods:
@@ -79,8 +80,19 @@ class Core:
             print(char, end='', flush=True)
             time.sleep(duration)
         print()
+    
+    def slowinput(text, duration=0.05):
+        for char in text:
+            print(char, end='', flush=True)
+            time.sleep(duration)
+        return input().lower()
 
 class Locations:
+    @staticmethod
+    def home(player):
+        player.location="home"
+        return "home"
+
     @staticmethod
     def grassy_meadow(player):
         player.location="grassy_meadow"
@@ -90,3 +102,4 @@ class Locations:
     def city(player):
         player.location="city"
         return "city"
+    

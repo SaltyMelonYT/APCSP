@@ -1,5 +1,7 @@
 import items
-from backend import Locations
+from backend import Locations, Core, Player
+from locations import home
+slowprint=Core.slowprint
 def cmds(args, player, enemy=None):
     if args == "/h":
         print("food - list consumables\nheal - consume a good to heal\nweapons - see available weapons\nattack - attack an enemy with a specified weapon\nplaces - See a list of available places to travel to\ntravel - Travel to a location\n")
@@ -21,16 +23,56 @@ def cmds(args, player, enemy=None):
             weapon=input("Weapon to use: ")
             print(player.attack(enemy, weapon))
     
+    elif args == "inv":
+        if not items.items:
+            print("Your inventory is empty!")
+        else:
+            print(items.items)
+
     elif args == "places":
-        print("1.) Grassy Meadow\n2.) City")
+        places = []
+
+
+        if player.location == "home":
+            places.append("Grassy Meadow")
+        elif player.location == "grassy_meadow":
+            places.append("Home")
+
+        if "map" in items.items:
+            places.append("City")
+
+        filtered = [p for p in places if p.lower().replace(" ", "_") != player.location]
+
+        for i, place in enumerate(filtered, start=1):
+            print(f"{i}.) {place}")
+
     
-    elif args == "travel":
-        print("1.) Grassy Meadow\n2.) City")
-        travel=input("Where do you want to travel to? ")
-        if travel == "1":
-            Locations.grassy_meadow(player)
-        elif travel=="2":
-            Locations.city(player)
-    
+    elif args.startswith("travel"):
+        parts = args.split()
+        destinations = []
+
+        destinations.append(("Grassy Meadow", Locations.grassy_meadow))
+        if "map" in items.items:
+            destinations.append(("City", Locations.city))
+
+        if len(parts) == 1:
+            for i, (name, _) in enumerate(destinations, start=1):
+                print(f"{i}.) {name}")
+
+            travel = input("Where do you want to travel to? ")
+
+        else:
+            travel = parts[1]
+
+        if travel.isdigit():
+            travel_num = int(travel)
+            if 1 <= travel_num <= len(destinations):
+                _, location_func = destinations[travel_num - 1]
+                location_func(player)
+            else:
+                print("Invalid destination!")
+        else:
+            print("Invalid input!")
+            
     else:
         print("Unknown command, enter /h for help")        

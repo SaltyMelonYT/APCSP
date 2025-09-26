@@ -1,4 +1,4 @@
-from backend import Enemy, Core, Player
+from backend import Enemy, Core, Player, Locations
 import items
 import commands
 slowprint=Core.slowprint

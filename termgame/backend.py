@@ -7,14 +7,21 @@ class Player:
         self.name = name
         self.health = 100
         self.location="house"
+        self.visited=set()
 
     def heal(self, fooditem):
         if fooditem in items.foods:
-            heal_amount = items.foods[fooditem]
-            self.health += heal_amount
-            if self.health > 100:
-                self.health = 100
-            return f"{self.name} consumed {fooditem}, health is now {self.health}"
+            # Check if there's any quantity left
+            if items.foods[fooditem]["quantity"] > 0:
+                heal_amount = items.foods[fooditem]["restore"]  # or "heal" if you rename it
+                self.health += heal_amount
+                if self.health > 100:
+                    self.health = 100
+                # Subtract one from quantity
+                items.foods[fooditem]["quantity"] -= 1
+                return f"{self.name} consumed {fooditem}, health is now {self.health}"
+            else:
+                return f"No {fooditem} left!"
         return "That food item does not exist!"
     
     def attack(self, enemy, weapon):
@@ -33,6 +40,9 @@ class Enemy:
     def __init__(self, name):
         self.name = name
         self.health = 30
+
+    def dialogue(self, text):
+        Core.slowprint(f"{self.name}: {text}")
 
     def takeDamage(self, damageValue):
         self.health -= damageValue
@@ -55,7 +65,7 @@ class NPC:
         self.name = name
 
     def dialogue(self, text):
-        Core.slowprint(text)
+        Core.slowprint(f"{self.name}: {text}")
 
     def interact(self, opt1, opt2, opt3):
         print(f"1.) {opt1}")

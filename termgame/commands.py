@@ -2,10 +2,14 @@ import items
 from backend import Locations
 def cmds(args, player, enemy=None):
     if args == "/h":
-        print("food - consume an item\nweapons - see available weapons\nattack - attack an enemy with a specified weapon\nplaces - See a list of available places to travel to\ntravel - Travel to a location")
+        print("food - list consumables\nheal - consume a good to heal\nweapons - see available weapons\nattack - attack an enemy with a specified weapon\nplaces - See a list of available places to travel to\ntravel - Travel to a location\n")
     
     elif args == "food":
         print(f"Your food options are {items.foods}")
+
+    elif args == "heal":
+        food=input("What do you want to eat? ")
+        print(player.heal(food))
     
     elif args == "weapons":
         print(f"Your available weapons are {items.weapons}")
@@ -18,7 +22,7 @@ def cmds(args, player, enemy=None):
             print(player.attack(enemy, weapon))
     
     elif args == "places":
-        print("1.) grassy meadow")
+        print("1.) Grassy Meadow\n2.) City")
     
     elif args == "travel":
         print("1.) Grassy Meadow\n2.) City")

@@ -6,7 +6,7 @@ class calc:
         c = a-b
         print(c)
     def multiply(a,b):
-        c = a*b
+        c = float(a)*float(b)
         print(c)
     def divide(a, b):
         c = a/b

@@ -40,4 +40,4 @@ def alternate(bits):
         print(binary)
     print(binary)
 
-alternate(67)
+alternate(50)

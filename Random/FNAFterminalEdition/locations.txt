@@ -1,0 +1,10 @@
+0=stage - Bonnie, Freddy, Chica
+1=dining room - Bonnie, Freddy, Chica
+2=backstage - Bonnie
+3=bathroom - Freddy, Chica
+4=Storage Closet - Bonnie
+5=Kitchen - Chica, Freddy
+6=West Hall - Bonnie, Foxy
+7=East Hall - Chica, Freddy
+8=West Corner - Bonnie
+9=East Corner - Chica, Freddy

@@ -6,6 +6,7 @@ questions = {
     }
 }
 
+
 def flashcards(dict):
     goneover=[]
     correct = []
@@ -17,7 +18,7 @@ def flashcards(dict):
             pass
         else:
             print(question)
-            dict(*data["choices"], data["correct"], correct)
+            amount(data["correct"], correct)
             goneover.append(question)
             counter +=1
     print("You got", len(goneover),"correct.")

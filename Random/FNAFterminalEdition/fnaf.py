@@ -13,15 +13,15 @@ class game():
         self.Chica=animatronic("Chica", 9)
         self.Bonnie=animatronic("Bonnie")
         self.Foxy=animatronic("Foxy")
-    l_animatronic=[]
-    r_animatronic=[]
-    r_doorState=0 # Open
-    l_doorState=0 # Open
-    r_lightState=0 # off
-    l_lightState=0 # off
-
-    def alive(self):
-        status=1
+        self.l_animatronic=[]
+        self.r_animatronic=[]
+        self.r_doorState=0 # Open
+        self.l_doorState=0 # Open
+        self.r_lightState=0 # off
+        self.l_lightState=0 # off
+        self.drainState=1 # Minimal power usage
+        self.amount=100 # power level
+        self.alive=0 # Alive, 1 is dead
 
     def chicaMove(self):
         chance=random.randrange(0,50)
@@ -30,9 +30,9 @@ class game():
         if chance<25:
             advance=random.randrange(1,3)
             # print("Chica advance chance:", advance)
-            if toMove.location==9 and self.l_doorState==0:
+            if toMove.location==9 and self.r_doorState==0: # Death Logic
                 print("Uh oh! Chica killed you. GAME OVER")
-                self.alive=0
+                self.alive=1
 
             if advance==1: # Forward progression
                 if toMove.location==0: # If on stage, move to dining area
@@ -44,7 +44,7 @@ class game():
                 elif toMove.location % 2 == 1: # If in dining area, or any other odd room, advance 2
                     toMove.location=toMove.location+2
                     if toMove.location==9:
-                        self.l_animatronic.append("chica")
+                        self.r_animatronic.append("chica")
 
             elif advance==2: # Backwards progression
                 if toMove.location==1 or toMove.location==0:
@@ -52,8 +52,8 @@ class game():
 
                 else:
                     toMove.location=toMove.location-2
-                    if "chica" in self.l_animatronic:
-                        self.l_animatronic.remove("chica")
+                    if "chica" in self.r_animatronic:
+                        self.r_animatronic.remove("chica")
         else:
             pass
 
@@ -64,6 +64,8 @@ class game():
         if chance<25:
             advance=random.randrange(1,3)
             # print("Bonnie advance chance:", advance)
+            if toMove.location==8 and self.l_doorState==0: # Bonnies kill logic
+                self.alive=1
 
             if advance==1: # Forward progression
                 if toMove.location==0: # If on stage, move to dining area
@@ -75,7 +77,7 @@ class game():
                 elif toMove.location % 2 == 0: # If in dining area, or any other odd room, advance 2
                     toMove.location=toMove.location+2
                     if toMove.location==8:
-                        self.r_animatronic.append("bonnie")
+                        self.l_animatronic.append("bonnie")
 
             elif advance==2: # Backwards progression
                 if toMove.location==1 or toMove.location==0:
@@ -83,8 +85,8 @@ class game():
 
                 else:
                     toMove.location=toMove.location-2
-                    if "bonnie" in self.r_animatronic:
-                        self.r_animatronic.remove("bonnie")
+                    if "bonnie" in self.l_animatronic:
+                        self.l_animatronic.remove("bonnie")
         else:
             pass
 
@@ -97,51 +99,76 @@ class game():
         # print(choose)
             
     def l_light(self, input): # Controlled with p
-        lightState=game.l_lightState
+        self.l_lightState
         if input.lower()=='p':
-            if lightState==0:
-                lightState=1
+            if self.l_lightState==0:
+                self.l_lightState=1
                 print("Light on!")
-                if 'freddy' in game.l_animatronic or 'chica' in game.l_animatronic:
+                if 'freddy' in self.l_animatronic or 'chica' in self.l_animatronic:
                     print("Animatronic in door!")
                 else:
                     print("Clear!")
-            elif lightState==1:
+            elif self.l_lightState==1:
                 print("Light off!")
-                lightState=0
+                self.l_lightState=0
 
     def r_door(self, input): # controlled with l
         if input.lower()=="l":
-            if game.r_doorState==0:
-                game.r_doorState=1
+            if self.r_doorState==0:
+                self.r_doorState=1
                 print("Closed the door")
+                self.drainState=self.drainState+1
             else:
-                game.r_doorState=0
+                self.r_doorState=0
                 print("Opened the door")
     
 
     def r_light(self, input): # Controlled with q
-        lightState=game.r_lightState
+        self.r_lightState
         if input.lower()=='q':
-            if lightState==0:
-                lightState=1
+            if self.l_lightState==0:
+                self.l_lightState=1
                 print("Light on!")
-                if 'bonnie' in game.r_animatronic:
+                if 'bonnie' in self.r_animatronic:
                     print("Animatronic!")
                 else:
                     print("Clear!")
-            elif lightState==1:
+            elif self.l_lightState==1:
                 print("Light off!")
-                lightState=0
+                self.l_lightState=0
 
     def l_door(self, input): # Controlled with a
         if input.lower()=="a":
-            if game.l_doorState==0:
-                game.l_doorState=1
+            if self.l_doorState==0:
+                self.l_doorState=1
                 print("Closed the door")
+                self.drainState=self.drainState+1
             else:
-                game.l_doorState=0
+                self.l_doorState=0
                 print("Opened the door")
+
+    def power():
+        # Multipliers
+        amount=game.amount
+        if game.drainState == 1:
+            chance=random.randint(1,2)
+            if chance == 1:
+                randDrain=random.randint(1,5)
+                amount=amount-randDrain
+            else:
+                pass
+        if game.drainState == 2:
+            chance=random.randint(1,2)
+            if chance == 1:
+                randDrain=random.randint(3,5)
+                amount=amount-randDrain
+        if game.drainState == 3:
+            chance=random.randint(1,2)
+            if chance == 1:
+                randDrain=random.randint(5,7)
+                amount=amount-randDrain
+        
+
 
 def clear():
     if os.name == 'nt':
@@ -164,11 +191,11 @@ def main():
             displayHour = 12
 
         g.animatronicProgression()
-
+        print(f"{g.amount}%")
         print(displayHour, "AM")
         action = input("What action? (h for help) ").lower()
         clear()
-        if g.alive==0:
+        if g.alive==1:
             break
         else:
             if action == 'q':

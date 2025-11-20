@@ -6,5 +6,6 @@
 5=Kitchen - Chica, Freddy
 6=West Hall - Bonnie, Foxy
 7=East Hall - Chica, Freddy
-8=West Corner - Bonnie
+8=West Corner - Bonnie, Foxy
 9=East Corner - Chica, Freddy
+10= Pirates Cove - Foxy

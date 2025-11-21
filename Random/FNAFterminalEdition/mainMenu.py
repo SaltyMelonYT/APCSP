@@ -1,17 +1,20 @@
 import os
-import fnafInTheTerminal
-def clear():
-    if os.name == 'nt':
-        os.system('cls')
-    else:
-        os.system('clear')
+import FNAF_InTheTerminalV2
+import json
 
+script_dir = os.path.dirname(os.path.abspath(__file__))
+output = os.path.join(script_dir, "states.json")
+
+if not os.path.exists(output):
+    data = {"continueState": 1}
+    with open(output, 'w') as f:
+        json.dump(data, f, indent=4)
 
 nums=["1","2",'3']
 def main():
-    g=fnafInTheTerminal.game()
-    fnafInTheTerminal.game.load
-    clear()
+    g=FNAF_InTheTerminalV2.game()
+    g.clear()
+    g.load()
     print("Welcome to FNAF: In The Terminal")
     print("1.) New game (Night 1)")
     print(f"2.) Continue (Night {g.continueState})")
@@ -23,10 +26,9 @@ def main():
         else:
             game=int(game)
         if game == 1:
-            clear()
+            g.clear()
             import night1
             night1.main()
-            break
         elif game == 2:
             if g.continueState==1:
                 import night1

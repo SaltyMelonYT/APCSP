@@ -1,18 +1,17 @@
-import fnafInTheTerminal as f
+import FNAF_InTheTerminalV2 as f
 import time
+import threading
 g=f.game()
-
 def main():
-    print("NIGHT THREE, 12:00AM")
+    print("NIGHT THRE, 12:00AM")
     time.sleep(0.9)
+    threading.Thread(target=g.power, daemon=True).start()
+    threading.Thread(target=g.time, daemon=True).start()
+    threading.Thread(target=g.animatronicProgession, daemon=True).start()
+    g.clear()
     while g.alive==0:
         g.controls()
-        bonnie=g.bonnieMove(50,17)
-        chica=g.bonnieMove(50,19)
-        foxy=g.foxy()
-        freddy=g.freddyMove(75, 60)
-        g.animatronicProgression(2, chica, bonnie, foxy, freddy)
-        if g.alive==3:
-            import night4 as n4
-            n4.main()
+    if g.alive==2:
+        import night4
+        night4.main()
 main()

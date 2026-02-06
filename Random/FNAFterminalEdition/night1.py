@@ -15,7 +15,6 @@ def main():
     g.clear()
     while g.alive==0:
         g.controls()
-        g.clear()
     if g.alive==2:
         g.continueState=2
         g.save()

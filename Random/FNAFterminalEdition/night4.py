@@ -12,6 +12,8 @@ def main():
     while g.alive==0:
         g.controls()
     if g.alive==2:
+        g.continueState=5
+        g.save()
         import night5
         night5.main()
 main()

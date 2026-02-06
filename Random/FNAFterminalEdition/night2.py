@@ -3,6 +3,7 @@ import time
 import threading
 g=f.game()
 def main():
+    g.clear()
     print("NIGHT TWO, 12:00AM")
     time.sleep(0.9)
     threading.Thread(target=g.power, daemon=True).start()

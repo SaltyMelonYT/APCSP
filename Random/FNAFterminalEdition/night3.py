@@ -12,6 +12,8 @@ def main():
     while g.alive==0:
         g.controls()
     if g.alive==2:
+        g.continueState=4
+        g.save()
         import night4
         night4.main()
 main()

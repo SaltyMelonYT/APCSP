@@ -75,11 +75,11 @@ class game():
             json.dump(data, f, indent=4)
 
     nightConf = {
-    1: {"chica": (100,50), "bonnie": (100,50), "foxy": (100, 90), "freddy": (0,0), "max": 3},
-    2: {"chica": (75,50), "bonnie": (80,50), "foxy": (80,69), "freddy": (0,0), "max": 3},
-    3: {"chica": (70,54), "bonnie": (60,30), "foxy": (75,40), "freddy": (55,28), "max": 4},
-    4: {"chica": (65, 43), "bonnie":(50, 25), "foxy": (50, 40), "freddy": (50, 30), "max": 4},
-    5: {"chica": (40, 10), "bonnie":(30, 15), "foxy": (35, 14), "freddy": (17, 7), "max": 4}
+    1: {"chica": (100,50), "bonnie": (100,50), "foxy": (5, 4), "freddy": (0,0), "max": 3},
+    2: {"chica": (75,50), "bonnie": (80,50), "foxy": (4,4), "freddy": (0,0), "max": 3},
+    3: {"chica": (70,54), "bonnie": (60,30), "foxy": (3,4), "freddy": (55,28), "max": 4},
+    4: {"chica": (65, 43), "bonnie":(50, 25), "foxy": (3, 4), "freddy": (50, 30), "max": 4},
+    5: {"chica": (40, 10), "bonnie":(30, 15), "foxy": (3, 4), "freddy": (17, 7), "max": 4}
     }
 
     def r_door(self):
@@ -271,31 +271,47 @@ class game():
             if self.cameraState==1:
                 self.freddyAdvance=0
 
-    def foxyAttack(self): # This is supposed to be a threaded process. The player has 3 seconds to close the door
-        time.sleep(3)
-        if self.r_doorState==0:
-            print("UH OH! Foxy killed you. GAME OVER")
-            self.alive=1
-        else:
-            for i in range(3):
-                print("**BANG**")
-                time.sleep(0.4)
-                self.powerAmount=self.powerAmount-self.foxyDrain
-            self.Foxy.location=10
-            self.foxyMoveOn=0
-            self.foxyState=0
-            self.foxyProgress=0
-                
-    def foxy(self, difficulty,risk):
-        if self.foxyProgress==difficulty:
-            self.foxyState+=1
+    def foxyAttack(self):
+        attack_time = 3  # total seconds to attack
+        interval = 0.2
+        elapsed = 0
+        while elapsed < attack_time:
+            if self.r_doorState == 1:
+                print("Foxy run blocked! Door closed!")
+                self.Foxy.location = 10
+                self.foxyMoveOn = 0
+                self.foxyState = 0
+                self.foxyProgress = 0
+                return
+            time.sleep(interval)
+            elapsed += interval
 
-        if self.foxyState==4:
-            self.Foxy.location=6
+        # Door open → death
+        print("UH OH! Foxy killed you. GAME OVER")
+        self.alive = 1
 
-        if self.Foxy.location==6 and self.foxyMoveOn==risk:
-            print("Foxy is coming....")
-            threading.Thread(target=self.foxyAttack).start()
+    def foxy(self, difficulty, risk):
+        self.foxyProgress += 1
+
+        if self.foxyProgress >= difficulty:
+            self.foxyState += 1
+            self.foxyProgress = 0
+
+        if self.foxyState >= 3:
+            self.Foxy.location = 6 
+
+        if self.Foxy.location == 6:
+
+            if self.foxyMoveOn >= risk:
+                print("Foxy is coming....")
+
+                threading.Thread(target=self.foxyAttack).start()
+
+                return
+            
+            self.foxyMoveOn += 1
+
+
 
     def animatronicProgession(self, night=1): # Threaded process
         settings = self.nightConf[night]
@@ -357,6 +373,10 @@ class game():
                 print("Freddy")
             if self.Foxy.location==self.cameraView:
                 print(f"Foxy({self.foxyState})")
+            if self.Foxy.location!=10 and self.cameraView==10:
+                print("its me")
+            if self.cameraView==10 and self.cameraState==1:
+                self.foxyProgress=0
             print(f"{self.displayPower}%")
             print(f"{self.displayHour}:00 AM")
             self.powerDisplay()

@@ -1,7 +1,10 @@
-dict={
-    "patties":50
-}
+numList=[1,2,2,3,3,3,3,3]
+numDict={}
 
-print(dict)
-dict["patties"]-=1
-print(dict)
+for i in numList:
+    if i not in numDict:
+        numDict[i]=1
+    else:
+        numDict[i]+=1
+
+print(numDict)
